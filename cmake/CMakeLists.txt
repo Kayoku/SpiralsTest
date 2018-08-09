@@ -5,10 +5,10 @@ project(hash)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "./bin")
 
 include_directories(
- ../
+ ../geohash/src
 )
 
 add_executable(geohash
- ../main.c
- ../geohash.c
+ ../geohash/src/main_geohash.c
+ ../geohash/src/geohash.c
 )
