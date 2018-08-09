@@ -13,9 +13,8 @@ Les exécutables seront générés dans le sous dossier ./cmake/bin
 
 ## TODO
 
-- Faire la fonction "decode" de geohash
 - Rendre l'executable utilisable avec des arguments (getopt)
-- Faire des tests basiques pour les fonctions geohash (pour être certain qu'elle fonctionne dans les cas principaux)
+- Commencer SimHash
 
 ## Doc
 
