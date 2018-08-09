@@ -3,7 +3,7 @@ Dépôt du test technique C - https://docs.google.com/document/d/1IlGUcNnYzX9uyY
 
 ## Installer les dépendances
 
-	sudo apt-get install cmake
+	sudo apt-get install cmake libcunit1 libcunit1-doc libcunit1-dev
 
 ## Compiler le projet
 
