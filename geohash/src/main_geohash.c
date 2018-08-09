@@ -13,10 +13,10 @@ int main()
 /**************************************************************************/
 {
  struct Coord coord;
- coord.latitude = 42.6; 
- coord.longitude = -5.6; 
+ coord.latitude = -25.382708;
+ coord.longitude = -49.265506;
 
- printf("%s\n", encode_geohash(coord, 5));
+ printf("%s\n", encode_geohash(coord, 12));
 
  return 0;
 }
