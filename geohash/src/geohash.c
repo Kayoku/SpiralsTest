@@ -10,35 +10,6 @@ float interval_mean(struct Interval interval)
 }
 
 /**************************************************************************/
-char base32_to_char(uint8_t b)
-/**************************************************************************/
-{
- char c = 48;
-
- /* Entre 0-9 */
- if (b < 10)
-  c += b;
- /* Pour a-z excluant a,i,l,o */
- else
- {
-  /* i */
-  if (b < 17)
-   c += 40 + b;
-  /* l */
-  else if (b < 19)
-   c += 41 + b;
-  /* o */
-  else if (b < 21)
-   c += 42 + b;
-  /* ... z */
-  else
-   c += 43 + b;
- }
-
- return c;
-}
-
-/**************************************************************************/
 char* encode_geohash(struct Coord coord, int precision)
 /**************************************************************************/
 {
@@ -73,7 +44,7 @@ char* encode_geohash(struct Coord coord, int precision)
 
     /* On vérifie si la valeur est au dessous de la moyenne
        Dans ce cas on met le bit à 1, et on ajuste le borne inf */
-    if (coord.longitude > interval_mean(interval_long))
+    if (coord.longitude >= interval_mean(interval_long))
     {
      bin_long |= 1; 
      interval_long.min = interval_mean(interval_long);
@@ -86,7 +57,7 @@ char* encode_geohash(struct Coord coord, int precision)
    else
    {
     bin_lat <<= 1; 
-    if (coord.latitude > interval_mean(interval_lat))
+    if (coord.latitude >= interval_mean(interval_lat))
     {
      bin_lat |= 1;
      interval_lat.min = interval_mean(interval_lat);
@@ -115,7 +86,7 @@ char* encode_geohash(struct Coord coord, int precision)
    }
 
    /* Ici on initialise un nouveau caractère à chaque nouveau 5 bits */
-   hash[pos] = base32_to_char(b);
+   hash[pos] = base32_to_char[b];
   }
 
   return hash;
@@ -125,8 +96,9 @@ char* encode_geohash(struct Coord coord, int precision)
 }
 
 /**************************************************************************/
-/*struct Coord decode_geohash(char* geohash)*/
+struct Coord decode_geohash(char* hash)
 /**************************************************************************/
-/*{
- return NULL;
-}*/
+{
+ struct Coord coord;
+ return coord;
+}

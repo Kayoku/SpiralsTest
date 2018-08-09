@@ -10,19 +10,6 @@ static float longitudes[] = {-5.6, -49.265506, -49.315, -49.266};
 static char* hashs[]      = {"ezs42", "6gkzwgjzn820", "6gkzmg1w", "6gkzwgjz"};
 
 /**************************************************************************/
-void test_base32_to_char()
-/**************************************************************************/
-{
- char* carac[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "b",
-                 "c", "d", "e", "f", "g", "h", "j", "k", "m", "n", "p", 
-                 "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
- int i;
-
- for (i = 0 ; i < 32 ; i++)
-  CU_ASSERT_EQUAL(base32_to_char(i), carac[i][0]);
-}
-
-/**************************************************************************/
 void test_encode_geohash()
 /**************************************************************************/
 {
@@ -36,7 +23,25 @@ void test_encode_geohash()
   precision = strlen(hashs[i]);
   coord.latitude = latitudes[i];
   coord.longitude = longitudes[i];
+  printf("%s && %s\n", encode_geohash(coord, precision), hashs[i]);
   CU_ASSERT_EQUAL(strcmp(encode_geohash(coord, precision), hashs[i]), 0);
+ }
+}
+
+/**************************************************************************/
+void test_decode_geohash()
+/**************************************************************************/
+{
+ int size_test, i;
+ struct Coord coord;
+
+ size_test = sizeof(latitudes)/sizeof(latitudes[0]);
+
+ for (i = 0 ; i < size_test ; i++)
+ {
+  coord = decode_geohash(hashs[i]);
+  CU_ASSERT_TRUE(coord.latitude == latitudes[i] &&
+                 coord.longitude == longitudes[i]);
  }
 }
 
@@ -59,8 +64,8 @@ int main()
  }
 
  /* Ajout d'un test à une suite */
- if (CU_add_test(pSuite, "base32_to_char", test_base32_to_char) == NULL ||
-     CU_add_test(pSuite, "encode_geohash", test_encode_geohash) == NULL)
+ if (CU_add_test(pSuite, "encode_geohash", test_encode_geohash) == NULL ||
+     CU_add_test(pSuite, "decode_geohash", test_decode_geohash) == NULL)
  {
   CU_cleanup_registry();
   return CU_get_error();

@@ -9,6 +9,12 @@
 /* https://en.wikipedia.org/wiki/Geohash */
 
 /*
+ * Variable permettant de convertir un nombre en char pour geohash
+ */
+
+static char base32_to_char[32] = "0123456789bcdefghjkmnpqrstuvwxyz";
+
+/*
  * Structure
  * Définit une intervalle entre deux valeurs
  */
@@ -28,14 +34,6 @@ float interval_mean(struct Interval interval);
 
 /*
  * Fonction
- * Permet de renvoyer une valeur base32 en char selon
- * le codage geohash
- */
-
-char base32_to_char(uint8_t b);
-
-/*
- * Fonction
  * Permet d'encoder des coordonnées sous la forme
  * d'une chaine geohash
  * 
@@ -44,6 +42,13 @@ char base32_to_char(uint8_t b);
  */
 
 char* encode_geohash(struct Coord coord, int precision);
+
+/*
+ * Fonction
+ * Permet de décoder un hash sous la forme de coordonnées
+ */
+
+struct Coord decode_geohash(char* hash);
 
 /*
  * Fonction
