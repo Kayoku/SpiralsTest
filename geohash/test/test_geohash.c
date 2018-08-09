@@ -1,9 +1,27 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "geohash.h"
+
 #include "CUnit/Basic.h"
 
+/**************************************************************************/
+void test_base32_to_char()
+/**************************************************************************/
+{
+ char* carac[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "b",
+                 "c", "d", "e", "f", "g", "h", "j", "k", "m", "n", "p", 
+                 "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+ int i;
+
+ for (i = 0 ; i < 32 ; i++)
+  CU_ASSERT_EQUAL(base32_to_char(i), carac[i][0]);
+}
+
+
+/**************************************************************************/
 int main()
+/**************************************************************************/
 {
  CU_pSuite pSuite = NULL;
 
@@ -12,7 +30,7 @@ int main()
   return CU_get_error();
 
  /* Ajout des suites au registre */
- pSuite = CU_add_suite("Example", NULL, NULL);
+ pSuite = CU_add_suite("Geohash", NULL, NULL);
  if (pSuite == NULL)
  {
   CU_cleanup_registry();
@@ -20,7 +38,7 @@ int main()
  }
 
  /* Ajout d'un test à une suite */
- if (CU_add_test(pSuite, "first test", fonction) == NULL)
+ if (CU_add_test(pSuite, "base32_to_char", test_base32_to_char) == NULL)
  {
   CU_cleanup_registry();
   return CU_get_error();
@@ -28,6 +46,7 @@ int main()
 
  /* Run tous les tests */
  CU_basic_set_mode(CU_BRM_VERBOSE);
+ CU_set_error_action(CUEA_FAIL);
  CU_basic_run_tests();
  CU_cleanup_registry();
 
