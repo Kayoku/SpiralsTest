@@ -1,6 +1,16 @@
 # SpiralsTest
 Dépôt du test technique C - https://docs.google.com/document/d/1IlGUcNnYzX9uyYWiXiGbGTdFMsk7FYVTBEA2Nf0BjVM/edit
 
+## Installer les dépendances
+
+	sudo apt-get install cmake
+
+## Compiler le projet
+
+	./compile.sh
+
+Les executables seront générés dans le sous dossier ./cmake/bin
+
 ## TODO
 
 - Faire la fonction "decode" de geohash

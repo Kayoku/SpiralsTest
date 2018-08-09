@@ -1,2 +1,7 @@
 *.o
 main
+cmake/CMakeCache.txt
+cmake/CMakeFiles
+cmake/cmake_install.cmake
+cmake/Makefile
+cmake/bin
