@@ -16,3 +16,7 @@ Les executables seront générés dans le sous dossier ./cmake/bin
 - Faire la fonction "decode" de geohash
 - Rendre l'executable utilisable avec des arguments (getopt)
 - Faire des tests basiques pour les fonctions geohash (pour être certain qu'elle fonctionne dans les cas principaux)
+
+## Doc
+
+https://fr.slideshare.net/seb478/ecam-os2015c-unitslides (test)
