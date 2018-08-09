@@ -10,6 +10,26 @@ double interval_mean(struct Interval interval)
 }
 
 /**************************************************************************/
+uint8_t char_to_base32(char c)
+/**************************************************************************/
+{
+ uint8_t base32 = 0;
+
+ if (c >= '0' && c <= '9')
+  base32 = c - 48;
+ else if (c >= 'b' && c <= 'h')
+  base32 = c - 88;
+ else if (c == 'j' || c == 'k')
+  base32 = c - 89;
+ else if (c == 'm' || c == 'n')
+  base32 = c - 90;
+ else if (c >= 'p' && c <= 'z')
+  base32 = c - 91;
+
+ return base32;
+}
+
+/**************************************************************************/
 char* encode_geohash(struct Coord coord, int precision)
 /**************************************************************************/
 {
@@ -89,12 +109,55 @@ char* encode_geohash(struct Coord coord, int precision)
 }
 
 /**************************************************************************/
-struct Coord decode_geohash(char* hash)
+struct Coord decode_geohash(char* hash, struct Coord_Error *max_error)
 /**************************************************************************/
 {
+ /* Variables */
+ struct Interval interval_lat = {MIN_LAT, MAX_LAT};
+ struct Interval interval_long = {MIN_LONG, MAX_LONG};
  struct Coord coord;
+ size_t size_hash = strlen(hash);
+ int even = 1;
+ int i;
+ uint8_t b;
+ uint8_t c;
+ double mean;
 
+ max_error->latitude_error = MAX_LAT;
+ max_error->longitude_error = MAX_LONG;
 
+ /* Pour chaque bits */
+ for (i = 0 ; i < size_hash*5 ; i++)
+ {
+  c = char_to_base32(hash[i/5]);
+  b = (c >> (4-(i%5))) & 0x1;
+
+  /* Longitude */
+  if (even)
+  {
+   mean = interval_mean(interval_long);
+   if (b)
+    interval_long.min = mean;
+   else
+    interval_long.max = mean;
+   max_error->longitude_error /= 2;
+  }
+  /* Latitude */
+  else
+  {
+   mean = interval_mean(interval_lat);
+   if (b)
+    interval_lat.min = mean;
+   else
+    interval_lat.max = mean;
+   max_error->latitude_error /= 2;
+  }
+
+  even = !even;
+ }
+
+ coord.latitude = interval_mean(interval_lat);
+ coord.longitude = interval_mean(interval_long);
 
  return coord;
 }

@@ -34,14 +34,18 @@ void test_decode_geohash()
 {
  int size_test, i;
  struct Coord coord;
+ struct Coord_Error max_error;
 
  size_test = sizeof(latitudes)/sizeof(latitudes[0]);
 
  for (i = 0 ; i < size_test ; i++)
  {
-  coord = decode_geohash(hashs[i]);
-  CU_ASSERT_TRUE(coord.latitude == latitudes[i] &&
-                 coord.longitude == longitudes[i]);
+  coord = decode_geohash(hashs[i], &max_error);
+  CU_ASSERT_TRUE(
+    coord.latitude >= latitudes[i]-max_error.latitude_error &&
+    coord.latitude <= latitudes[i]+max_error.latitude_error &&
+    coord.longitude >= longitudes[i]-max_error.longitude_error &&
+    coord.longitude <= longitudes[i]+max_error.longitude_error);
  }
 }
 
