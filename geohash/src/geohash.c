@@ -1,6 +1,7 @@
 #include "geohash.h"
 
 #include <stdio.h>
+#include <string.h>
 
 /**************************************************************************/
 double interval_mean(struct Interval interval)
