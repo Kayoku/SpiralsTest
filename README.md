@@ -28,7 +28,3 @@ Le second permet de lancer l'algorithme geohash directement, en lui donnant soit
 ## TODO
 
 - Commencer SimHash
-
-## Doc
-
-https://fr.slideshare.net/seb478/ecam-os2015c-unitslides (test)
