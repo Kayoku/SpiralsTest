@@ -15,7 +15,7 @@ Les exécutables seront générés dans le sous dossier ./cmake/bin
 
 ### Geohash
 
-Après avoir compiler le projet, on trouve deux exécutables dans le dossier ./cmake/bin.
+Après avoir compilé le projet, on trouve deux exécutables dans le dossier ./cmake/bin.
 
 Le premier permet de lancer les tests unitaires.
 
@@ -27,7 +27,6 @@ Le second permet de lancer l'algorithme geohash directement, en lui donnant soit
 
 ## TODO
 
-- Rendre l'executable utilisable avec des arguments (getopt)
 - Commencer SimHash
 
 ## Doc
