@@ -18,6 +18,26 @@ void test_base32_to_char()
   CU_ASSERT_EQUAL(base32_to_char(i), carac[i][0]);
 }
 
+/**************************************************************************/
+void test_encode_geohash()
+/**************************************************************************/
+{
+ /*char* encode_geohash(struct Coord coord, int precision);*/
+ int size_test     = 1;
+ int i;
+ struct Coord coord;
+
+ float latitude[]  = {42.6};
+ float longitude[] = {-5.6};
+ char* hash[]      = {"ezs42"};
+
+ for (i = 0 ; i < size_test ; i++)
+ {
+  coord.latitude = latitude[i];
+  coord.longitude = longitude[i];
+  CU_ASSERT_EQUAL(strcmp(encode_geohash(coord, 5), hash[i]), 0);
+ }
+}
 
 /**************************************************************************/
 int main()
@@ -38,7 +58,8 @@ int main()
  }
 
  /* Ajout d'un test à une suite */
- if (CU_add_test(pSuite, "base32_to_char", test_base32_to_char) == NULL)
+ if (CU_add_test(pSuite, "base32_to_char", test_base32_to_char) == NULL ||
+     CU_add_test(pSuite, "encode_geohash", test_encode_geohash) == NULL)
  {
   CU_cleanup_registry();
   return CU_get_error();
