@@ -9,7 +9,7 @@ Dépôt du test technique C - https://docs.google.com/document/d/1IlGUcNnYzX9uyY
 
 	./compile.sh
 
-Les executables seront générés dans le sous dossier ./cmake/bin
+Les exécutables seront générés dans le sous dossier ./cmake/bin
 
 ## TODO
 
