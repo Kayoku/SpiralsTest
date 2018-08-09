@@ -21,8 +21,8 @@ static char base32_to_char[32] = "0123456789bcdefghjkmnpqrstuvwxyz";
 
 struct Interval
 {
- float min;
- float max;
+ double min;
+ double max;
 };
 
 /*
@@ -30,7 +30,7 @@ struct Interval
  * Permet de renvoyer la moyenne de l'intervalle
  */
 
-float interval_mean(struct Interval interval);
+double interval_mean(struct Interval interval);
 
 /*
  * Fonction

@@ -5,9 +5,10 @@
 
 #include "CUnit/Basic.h"
 
-static float latitudes[]  = {42.6, -25.382708, -25.427, -25.383};
-static float longitudes[] = {-5.6, -49.265506, -49.315, -49.266};
-static char* hashs[]      = {"ezs42", "6gkzwgjzn820", "6gkzmg1w", "6gkzwgjz"};
+static double latitudes[]  = {42.6, -25.382708, -25.427, -25.383};
+static double longitudes[] = {-5.6, -49.265506, -49.315, -49.266};
+static char*  hashs[]      = {"ezs42", "6gkzwgjzn820",
+                              "6gkzmg1u", "6gkzwgjt"};
 
 /**************************************************************************/
 void test_encode_geohash()
@@ -23,7 +24,6 @@ void test_encode_geohash()
   precision = strlen(hashs[i]);
   coord.latitude = latitudes[i];
   coord.longitude = longitudes[i];
-  printf("%s && %s\n", encode_geohash(coord, precision), hashs[i]);
   CU_ASSERT_EQUAL(strcmp(encode_geohash(coord, precision), hashs[i]), 0);
  }
 }

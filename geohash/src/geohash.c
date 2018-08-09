@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 /**************************************************************************/
-float interval_mean(struct Interval interval)
+double interval_mean(struct Interval interval)
 /**************************************************************************/
 {
  return (interval.max + interval.min) / 2.0;
@@ -17,10 +17,14 @@ char* encode_geohash(struct Coord coord, int precision)
  struct Interval interval_lat;
  struct Interval interval_long;
  char* hash = (char*)malloc(sizeof(char) * (precision+1));
- int i, j;
- uint32_t bin_lat = 0x0, bin_long = 0x0;
- uint8_t b;
- int pos = -1;
+ int i;
+ uint8_t b = 0;
+ double mean;
+ int even = 1;
+
+ /* On vérifie précision qui doit se trouver entre 1 & 12 max */
+ if (precision < 1 || precision > 12)
+  precision = 5;
 
  /* On vérifie que les coordonnées sont dans les bonnes
     bornes de valeur possible */
@@ -34,61 +38,50 @@ char* encode_geohash(struct Coord coord, int precision)
   interval_long.min = MIN_LONG;
   interval_long.max = MAX_LONG;
 
-  for (i = 0 ; i < 5*precision ; i++)
+  for (i = 1 ; i <= 5*precision ; i++)
   {
-   /* Dans le cas ou i est pair (longitude) */
-   if (i % 2 == 0) 
-   {
-    /* on décale */
-    bin_long <<= 1; 
+   /* On décale */
+   b <<= 1;
 
+   /* Dans le cas ou i est pair (longitude) */
+   if (even)
+   {
     /* On vérifie si la valeur est au dessous de la moyenne
        Dans ce cas on met le bit à 1, et on ajuste le borne inf */
-    if (coord.longitude >= interval_mean(interval_long))
+    mean = interval_mean(interval_long);
+    if (coord.longitude > mean)
     {
-     bin_long |= 1; 
-     interval_long.min = interval_mean(interval_long);
+     b |= 1;
+     interval_long.min = mean;
     }
     /* Sinon on ajuste la borne max */
     else
-     interval_long.max = interval_mean(interval_long);
+     interval_long.max = mean;
    }
    /* Dans le cas ou i est impair (latitude) */
    else
    {
-    bin_lat <<= 1; 
-    if (coord.latitude >= interval_mean(interval_lat))
+    mean = interval_mean(interval_lat);
+    if (coord.latitude > mean)
     {
-     bin_lat |= 1;
-     interval_lat.min = interval_mean(interval_lat);
+     b |= 1;
+     interval_lat.min = mean;
     }
     else
-     interval_lat.max = interval_mean(interval_lat);
+     interval_lat.max = mean;
    }
-  }
 
-  /* Maintenant qu'on a les bin_lat & bin_long,
-     on va recréer les caractères */
-  for (i = precision-1 ; i >= 0 ; i--)
-  {
-   b = 0x00;
-   pos++;
-
-   for (j = 4 ; j >= 0 ; j--)
+   /* Si on a terminé pour le char, on reset */
+   if (i % 5 == 0)
    {
-    /* Si c'est pair (longitude) */
-    b <<= 1;
-    if ((j+i) % 2 == 0)
-     b |= (bin_long >> (int)(i*5+j)/2) & 0x1;
-    /* Si c'est impair (latitude) */
-    else
-     b |= (bin_lat >> (int)(i*5+j)/2) & 0x1;
+    hash[(i-1)/5] = base32_to_char[b];
+    b = 0x0;
    }
 
-   /* Ici on initialise un nouveau caractère à chaque nouveau 5 bits */
-   hash[pos] = base32_to_char[b];
+   even = !even;
   }
 
+  hash[precision] = '\0';
   return hash;
  }
 
@@ -100,5 +93,8 @@ struct Coord decode_geohash(char* hash)
 /**************************************************************************/
 {
  struct Coord coord;
+
+
+
  return coord;
 }

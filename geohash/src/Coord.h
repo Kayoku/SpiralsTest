@@ -14,8 +14,8 @@ static const int MIN_LONG = -180;
 
 struct Coord
 {
- float latitude;
- float longitude;
+ double latitude;
+ double longitude;
 };
 
 #endif
