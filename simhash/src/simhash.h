@@ -28,6 +28,18 @@ void md5_hash(char* string, char* md5);
 
 uint32_t encode_simhash(char* string, int block, int padding);
 
-/*int hamming_distance(char* string1, char* string2, int block, int padding);*/
+/*
+ * Fonction
+ * Permet d'encoder deux chaines de caractères
+ * avec l'algorithme simhash puis
+ * de calculer la distance de hamming entre les deux
+ *
+ * string1: première chaine
+ * string2: seconde chaine
+ * block:   nombre de caractère pour chaque hash
+ * padding: décalage entre chaque block
+ */
+
+int hamming_distance(char* string1, char* string2, int block, int padding);
 
 #endif

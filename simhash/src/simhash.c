@@ -39,14 +39,14 @@ uint32_t encode_simhash(char* string, int block, int padding)
    block -= ((i+block) - size_string) + 1;
 
   /* Copie le block */
-  strncpy(block_temp, &string[i], block); 
+  strncpy(block_temp, &string[i], block);
 
   /* On hash ce block */
   md5_hash(block_temp, md5_temp);
 
   /* On prend les 32 premiers bits du hash */
   strncpy(md5_temp_32, md5_temp, 8);
-  
+
   /* Pour chaque caractère hexadécimal du hash */
   hash_temp = strtol(md5_temp_32, NULL, 16);
 
@@ -65,4 +65,18 @@ uint32_t encode_simhash(char* string, int block, int padding)
 
  free(block_temp);
  return hash;
+}
+
+/**************************************************************************/
+int hamming_distance(char* string1, char* string2, int block, int padding)
+/**************************************************************************/
+{
+ uint32_t hash1, hash2, temp;
+
+ hash1 = encode_simhash(string1, block, padding);
+ hash2 = encode_simhash(string2, block, padding);
+
+ temp = hash1 ^ hash2;
+
+ return __builtin_popcount(temp);
 }
