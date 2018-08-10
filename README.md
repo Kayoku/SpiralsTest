@@ -27,4 +27,6 @@ Le second permet de lancer l'algorithme geohash directement, en lui donnant soit
 
 ## TODO
 
-- Commencer SimHash
+- Tester SimHash plus en profondeur
+- SimHash avec poids
+- Utiliser GoogleTest à la place de CUnit ? (test auto avec Cmake)
