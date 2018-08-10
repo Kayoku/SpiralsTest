@@ -4,8 +4,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "Coord.h"
-
 /* https://en.wikipedia.org/wiki/Geohash */
 
 /*
@@ -13,6 +11,17 @@
  */
 
 static char base32_to_char[32] = "0123456789bcdefghjkmnpqrstuvwxyz";
+
+/*
+ * Variables min/max pour la latitude et la longitude
+ */
+
+static const int MAX_LAT = 90;
+static const int MIN_LAT = -90;
+
+static const int MAX_LONG = 180;
+static const int MIN_LONG = -180;
+
 
 /*
  * Fonction
@@ -41,6 +50,17 @@ struct Coord_Error
 {
  double latitude_error;
  double longitude_error;
+};
+
+/*
+ * Structure
+ * Définit une coordonnée par sa latitude et sa longitude
+ */
+
+struct Coord
+{
+ double latitude;
+ double longitude;
 };
 
 /*
