@@ -3,19 +3,19 @@ Dépôt du test technique C - https://docs.google.com/document/d/1IlGUcNnYzX9uyY
 
 ## Installer les dépendances
 
-	sudo apt-get install cmake libcunit1 libcunit1-doc libcunit1-dev
+	sudo apt-get install cmake libcunit1 libcunit1-doc libcunit1-dev ninja
 
 ## Compiler le projet
 
 	./compile.sh
 
-Les exécutables seront générés dans le sous dossier ./cmake/bin
+Les exécutables seront générés dans le sous dossier "cmake" avec l'aide de CMake & Ninja. Une fois le script compile.sh exécuté une fois, vous pouvez recompiler simplement les exécutables juste avec la commande "ninja" directement dans le dossier "cmake".
 
 ## Exécutable
 
 ### Geohash
 
-Après avoir compilé le projet, on trouve deux exécutables dans le dossier ./cmake/bin.
+Après avoir compilé le projet, on trouve deux exécutables dans le dossier "cmake".
 
 Le premier permet de lancer les tests unitaires.
 

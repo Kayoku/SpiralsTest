@@ -3,5 +3,5 @@
 set -e
 
 cd cmake
-cmake .
-make
+cmake -G "Ninja" .
+ninja
