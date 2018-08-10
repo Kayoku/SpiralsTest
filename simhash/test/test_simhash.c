@@ -18,7 +18,7 @@ void test_md5_hash()
  char* hashs[]  = {"6598609863c7f869be3347ef3f91aa62",
                    "09abd41e19959d87956d9712706d7e3c",
                    "3d751b36ca259c45f90b9d38e08b9f7c",
-                   "5993d7a73d9f9a694e411ba0788cfe2d"}; 
+                   "5993d7a73d9f9a694e411ba0788cfe2d"};
 
  int size = 4, i;
  char md5_temp[2*MD5_DIGEST_LENGTH+1] = "";
@@ -32,13 +32,15 @@ void test_md5_hash()
 }
 
 /**************************************************************************/
-void test_encode_simhash()
+void test_hamming_distance()
 /**************************************************************************/
 {
  char* string = "Je suis une phrase de test pour voir si cela marche";
- char* string2 = "Je suis une phrase de test por voir si cela marche";
- /*printf("%u\n", encode_simhash(string, 2, 1)); 
- printf("%u", encode_simhash(string2, 2, 1)); */
+ char* string2 = "Je suis une phrase de test pour voir si cela marche";
+ char* string3 = "Phrase totalement différente";
+
+ CU_ASSERT_TRUE(hamming_distance(string, string2, 2, 1) == 0);
+ CU_ASSERT_FALSE(hamming_distance(string, string3, 2, 1) == 0);
 }
 
 /**************************************************************************/
@@ -61,7 +63,7 @@ int main()
 
  /* Ajout d'un test à une suite */
  if (CU_add_test(pSuite, "md5_hash", test_md5_hash) == NULL ||
-     CU_add_test(pSuite, "encode_simhash", test_encode_simhash) == NULL)
+     CU_add_test(pSuite, "hamming_distance", test_hamming_distance) == NULL)
  {
   CU_cleanup_registry();
   return CU_get_error();
