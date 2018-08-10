@@ -9,13 +9,13 @@ Dépôt du test technique C - https://docs.google.com/document/d/1IlGUcNnYzX9uyY
 
 	./compile.sh
 
-Les exécutables seront générés dans le sous dossier "cmake" avec l'aide de CMake & Ninja. Une fois le script compile.sh exécuté une fois, vous pouvez recompiler simplement les exécutables juste avec la commande "ninja" directement dans le dossier "cmake".
+Les exécutables seront générés dans le sous dossier "build" avec l'aide de CMake & Ninja. Une fois le script compile.sh exécuté une fois, vous pouvez recompiler simplement les exécutables juste avec la commande "ninja" directement dans le dossier "build".
 
 ## Exécutable
 
 ### Geohash
 
-Après avoir compilé le projet, on trouve deux exécutables dans le dossier "cmake".
+Après avoir compilé le projet, on trouve deux exécutables dans le dossier "build".
 
 Le premier permet de lancer les tests unitaires.
 
