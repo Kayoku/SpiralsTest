@@ -22,5 +22,11 @@ add_executable(simhash_test
  ./simhash/src/simhash.c
 )
 
-target_link_libraries(geohash_test cunit)
+add_executable(simhash
+ ./simhash/src/main_simhash.c
+ ./simhash/src/simhash.c
+)
+
 target_link_libraries(simhash_test cunit ssl crypto)
+target_link_libraries(simhash ssl crypto)
+target_link_libraries(geohash_test cunit)

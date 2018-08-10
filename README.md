@@ -25,6 +25,18 @@ Le second permet de lancer l'algorithme geohash directement, en lui donnant soit
 
 	./geohash ...
 
+### SimHash
+
+Après compilation du projet, on trouve deux exécutables dans le dossier "build".
+
+Le premier permet de lancer les tests unitaires.
+
+	./simhash_test
+
+Le second permet de tester l'algorithme simhash. (exécutez le sans argument pour comprendre également son fonctionnement)
+
+	./simhash
+
 ## TODO
 
 - Tester SimHash plus en profondeur
