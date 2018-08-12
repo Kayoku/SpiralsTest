@@ -9,9 +9,11 @@
 void actor_geohash_func(zsock_t *pipe, void *args)
 /**************************************************************************/
 {
+ zsock_signal(pipe, 0);
+
  int terminated = 0;
  char* message = (char*)malloc(sizeof(char) * 256);
- 
+
  char* router_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
  char* log_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
  sprintf(log_address, "@tcp://127.0.0.1:%d", PORT_GEO_LOG);
