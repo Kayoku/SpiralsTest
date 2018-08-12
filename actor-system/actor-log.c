@@ -25,6 +25,8 @@ void actor_log_func(zsock_t *pipe, void *args)
  zsock_t *sim= zsock_new_pull(sim_address);
  zpoller_t *poller = zpoller_new(router, geo, sim, NULL);
 
+ printf("\n============= LOG =============\n\n");
+
  while (!terminated)
  {
   /* Bloque pour savoir où j'ai reçu un message */
@@ -44,13 +46,14 @@ void actor_log_func(zsock_t *pipe, void *args)
   /* On récupère la commande dans le message */
   char* command = zmsg_popstr(msg);
 
+
   /* On agit selon la commande... */
   if (streq(command, "$TERM"))
    terminated = 1;
   else if (streq(command, "LIST"))
-   printf(" Acteur Log.\n");
+   printf(" Acteur Log\n");
   else
-   printf("%s", command);
+   printf("%s\n", command);
 
   /* On libère la mémoire */
   freen(command);

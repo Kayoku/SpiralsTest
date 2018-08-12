@@ -43,7 +43,7 @@ void actor_simhash_func(zsock_t *pipe, void *args)
   if (streq(command, "$TERM"))
    terminated = 1;
   else if (streq(command, "LIST"))
-   zstr_send(log, " Acteur SimHash\n");
+   zstr_send(log, " Acteur SimHash");
   else
   {
    message = "Error (simhash): bad command.\n";
@@ -60,5 +60,4 @@ void actor_simhash_func(zsock_t *pipe, void *args)
  free(log_address);
  zsock_destroy(&log);
  zsock_destroy(&router); 
- printf("done.\n");
 }

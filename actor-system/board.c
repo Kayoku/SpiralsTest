@@ -5,6 +5,7 @@
 #include "config.h"
 
 #define SIZE_COMMAND 10
+#define SIZE_MESSAGE 50
 
 /**************************************************************************/
 void clear_buffer()
@@ -45,6 +46,7 @@ int main()
 {
  /* Variables */
  char command[SIZE_COMMAND] = "";
+ char message[SIZE_MESSAGE] = "";
  int terminated = 0;
 
  /* Affichage démarrage */
@@ -75,6 +77,31 @@ int main()
   /* Commande LIST */
   if (strcmp(command, "LIST") == 0)
    zstr_send(router, command);
+  /* Commande GEO */
+  else if (strcmp(command, "GEO") == 0)
+  {
+   int precision;
+   double latitude, longitude;
+   printf("  Latitude: ");
+   fflush(stdout);
+   input_read(message, SIZE_MESSAGE);
+   latitude = atof(message);
+   printf("  Longitude: ");
+   fflush(stdout);
+   input_read(message, SIZE_MESSAGE);
+   longitude = atof(message);
+   printf("  Precision: ");
+   fflush(stdout);
+   input_read(message, SIZE_MESSAGE);
+   precision = atoi(message);
+   sprintf(message, "GEO %lf %lf %d", latitude, longitude, precision);
+   zstr_send(router, message);
+  }
+  /* Commande SIM */
+  /*else if (strcmp(command, "SIM") == 0)
+  {
+
+  }*/
   /* Commande QUIT */
   else if (strcmp(command, "QUIT") == 0)
   {

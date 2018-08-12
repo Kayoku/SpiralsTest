@@ -12,6 +12,8 @@ void actor_router_func(zsock_t *pipe, void *args)
  zsock_signal(pipe, 0);
 
  int terminated = 0;
+ char* delim = " ";
+ char* inter   = (char*)malloc(sizeof(char) * 256);
  char* message = (char*)malloc(sizeof(char) * 256);
  
  char* log_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
@@ -44,6 +46,8 @@ void actor_router_func(zsock_t *pipe, void *args)
 
   /* On récupère la commande dans le message */
   char* command = zmsg_popstr(msg);
+  strcpy(inter, command);
+  message = strtok(inter, delim);
 
   /* On agit selon la commande... */
   if (streq(command, "$TERM"))
@@ -55,13 +59,16 @@ void actor_router_func(zsock_t *pipe, void *args)
   }
   else if (streq(command, "LIST"))
   {
-   zstr_send(log, " Acteur Routeur\n");
+   zstr_send(log, " Acteur Routeur");
    zstr_send(geo, "LIST"); 
    zstr_send(sim, "LIST"); 
    zstr_send(log, "LIST");
   }
+  else if (streq(message, "GEO"))
+   zstr_send(geo, command);
   else
   {
+   printf("RECV: %s\n", command);
    message = "Error (router): bad command.\n";
    zstr_send(log, message);
   }
@@ -71,6 +78,7 @@ void actor_router_func(zsock_t *pipe, void *args)
   zmsg_destroy(&msg);
  } 
 
+ free(inter);
  free(message);
  free(geohash_address);
  free(simhash_address);

@@ -50,6 +50,7 @@ add_executable(actor-simhash
 add_executable(actor-geohash
  ./actor-system/actor-geohash-main.c
  ./actor-system/actor-geohash.c
+ ./geohash/src/geohash.c
 )
 
 target_link_libraries(simhash_test cunit ssl crypto)
