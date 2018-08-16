@@ -110,7 +110,7 @@ char* encode_geohash(struct Coord coord, int precision)
 }
 
 /**************************************************************************/
-struct Coord decode_geohash(char* hash, struct Coord_Error *max_error)
+struct Coord decode_geohash(const char* hash, struct Coord_Error *max_error)
 /**************************************************************************/
 {
  /* Variables */

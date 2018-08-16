@@ -3,13 +3,19 @@ Dépôt du test technique C - https://docs.google.com/document/d/1IlGUcNnYzX9uyY
 
 ## Installer les dépendances
 
-	sudo apt-get install cmake libcunit1 libcunit1-doc libcunit1-dev ninja-build openssl
+	sudo apt-get install cmake ninja-build openssl
 
 ## Compiler le projet
 
 	./compile.sh
 
-Les exécutables seront générés dans le sous dossier "build" avec l'aide de CMake & Ninja. Une fois le script compile.sh exécuté une fois, vous pouvez recompiler simplement les exécutables juste avec la commande "ninja" directement dans le dossier "build".
+Les exécutables seront générés dans le sous dossier "build" avec l'aide de CMake & Ninja. Une fois le script compile.sh exécuté une fois, vous pouvez recompiler simplement les exécutables juste avec la commande "ninja" directement dans le dossier "build". Le script va également se charger de télécharger la bibliotèque GoogleTest utilisé pour faire les tests unitaires, puis la compiler et faire ce qu'il faut pour l'installer correctement.
+
+## Tester le projet
+
+Pour lancer tous les tests et s'assurer que tout est correct, vous pouvez lancer la commande suivante
+
+	ninja test
 
 ## Exécutable
 

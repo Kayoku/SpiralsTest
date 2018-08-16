@@ -14,7 +14,7 @@
  * md5:    chaine en sortie (taille (2*MD5_DIGEST_LENGTH+1))
  */
 
-void md5_hash(char* string, char* md5);
+void md5_hash(const char* string, char* md5);
 
 /*
  * Fonction
@@ -26,7 +26,7 @@ void md5_hash(char* string, char* md5);
  * padding: décalage entre chaque block
  */
 
-uint32_t encode_simhash(char* string, int block, int padding);
+uint32_t encode_simhash(const char* string, int block, int padding);
 
 /*
  * Fonction
@@ -40,6 +40,9 @@ uint32_t encode_simhash(char* string, int block, int padding);
  * padding: décalage entre chaque block
  */
 
-int hamming_distance(char* string1, char* string2, int block, int padding);
+int hamming_distance(const char* string1,
+                     const char* string2,
+                     int block,
+                     int padding);
 
 #endif

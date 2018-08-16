@@ -10,7 +10,7 @@
  * Variable permettant de convertir un nombre en char pour geohash
  */
 
-static char base32_to_char[32] = "0123456789bcdefghjkmnpqrstuvwxyz";
+static char base32_to_char[33] = "0123456789bcdefghjkmnpqrstuvwxyz";
 
 /*
  * Variables min/max pour la latitude et la longitude
@@ -89,6 +89,6 @@ char* encode_geohash(struct Coord coord, int precision);
  * max_error: valeur max d'erreur sur les coordonnées
  */
 
-struct Coord decode_geohash(char* hash, struct Coord_Error *max_error);
+struct Coord decode_geohash(const char* hash, struct Coord_Error *max_error);
 
 #endif
