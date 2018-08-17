@@ -47,7 +47,6 @@ Le second permet de tester l'algorithme simhash. (exécutez le sans argument pou
 
 - Tester SimHash plus en profondeur
 - SimHash avec poids
-- Utiliser GoogleTest à la place de CUnit ? (test auto avec Cmake)
 
 - Mettre SimHash
 - $TERM n'arrête pas tous les processus. Faire des tests.
