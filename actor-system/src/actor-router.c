@@ -59,6 +59,7 @@ void actor_router_func(zsock_t *pipe, void *args)
   }
   else if (streq(command, "LIST"))
   {
+   zstr_send(log, "Liste des acteurs en vie:");
    zstr_send(log, " Acteur Routeur");
    zstr_send(geo, "LIST"); 
    zstr_send(sim, "LIST"); 

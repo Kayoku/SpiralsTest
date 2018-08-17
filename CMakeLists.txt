@@ -30,34 +30,20 @@ add_executable(simhash
 target_link_libraries(simhash ssl crypto)
 
 add_executable(board
- ./actor-system/board.c
+ ./actor-system/src/board.c
 )
 target_link_libraries(board czmq zmq)
 
-add_executable(actor-router
- ./actor-system/actor-router-main.c
- ./actor-system/actor-router.c
-)
-target_link_libraries(actor-router czmq zmq)
-
-add_executable(actor-log
- ./actor-system/actor-log-main.c
- ./actor-system/actor-log.c
-)
-target_link_libraries(actor-log czmq zmq)
-
-add_executable(actor-simhash
- ./actor-system/actor-simhash-main.c
- ./actor-system/actor-simhash.c
-)
-target_link_libraries(actor-simhash czmq zmq)
-
-add_executable(actor-geohash
- ./actor-system/actor-geohash-main.c
- ./actor-system/actor-geohash.c
+add_executable(actors
+ ./actor-system/src/actors.c
+ ./actor-system/src/actor-log.c
+ ./actor-system/src/actor-router.c
+ ./actor-system/src/actor-geohash.c
+ ./actor-system/src/actor-simhash.c
+ ./actor-system/src/utils.c
  ./geohash/src/geohash.c
 )
-target_link_libraries(actor-geohash czmq zmq)
+target_link_libraries(actors czmq zmq ssl crypto)
 
 ############################################################################
 ## GTest

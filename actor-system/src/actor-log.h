@@ -6,6 +6,7 @@
 #include <czmq.h>
 
 #include "config.h"
+#include "utils.h"
 
 /*
  * Fonction
