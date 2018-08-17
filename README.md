@@ -45,10 +45,12 @@ Le second permet de tester l'algorithme simhash. (exécutez le sans argument pou
 
 ## TODO
 
+#### SimHash
 - Tester SimHash plus en profondeur
 - SimHash avec poids
 
-- Mettre SimHash
+#### Acteurs
+
 - $TERM n'arrête pas tous les processus. Faire des tests.
 - Mieux modéliser l'architecture (pipe des zactors inutilisé... problème de conception)
 - Mettre au propre les variables dans chaque acteurs
