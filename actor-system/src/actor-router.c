@@ -2,91 +2,78 @@
 
 /*
  * Comportement:
- * 
+ *
  */
 
-/**************************************************************************/
+////////////////////////////////////////////////////////////////////////////
 void actor_router_func(zsock_t *pipe, void *args)
-/**************************************************************************/
+////////////////////////////////////////////////////////////////////////////
 {
  zsock_signal(pipe, 0);
 
  int terminated = 0;
- char* delim = " ";
+ char writer_address[256], log_address[256], command_address[256];
+
  char* inter   = (char*)malloc(sizeof(char) * 256);
  char* message = (char*)malloc(sizeof(char) * 256);
- 
- char* log_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
- char* geohash_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
- char* simhash_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
- char* command_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
- sprintf(log_address, "@tcp://127.0.0.1:%d", PORT_RT_LOG);
- sprintf(geohash_address, "@tcp://127.0.0.1:%d", PORT_RT_GEO);
- sprintf(simhash_address, "@tcp://127.0.0.1:%d", PORT_RT_SIM);
- sprintf(command_address, ">tcp://127.0.0.1:%d", PORT_BOARD);
-
- zsock_t *log    = zsock_new_push(log_address);
- zsock_t *geo    = zsock_new_push(geohash_address);
- zsock_t *sim    = zsock_new_push(simhash_address);
+ sprintf(&command_address[0], ">tcp://127.0.0.1:%d", PORT_BOARD);
+ sprintf(&writer_address[0], "ipc://127.0.0.1:%d", PORT_RT);
+ sprintf(&log_address[0], "ipc://127.0.0.1:%d", PORT_LOG);
  zsock_t *reader = zsock_new_pull(command_address);
+ zsock_t *writer = zsock_new_pub(writer_address);
+ zsock_t *log    = zsock_new_pub(log_address);
+ zpoller_t *poller = zpoller_new(pipe, reader, NULL);
 
  while (!terminated)
  {
+  zsock_t* which = (zsock_t*) zpoller_wait(poller, -1);
+
   /* Attend un message */
-  zmsg_t *msg = zmsg_recv(reader);
+  zmsg_t *msg = zmsg_recv(which);
 
   /* Si on a un bug pendant la récupération du message,
      l'acteur s'arrête */
   if (!msg)
   {
    message = "Error (router): msg error.\n";
-   zstr_send(log, message);
+   zsock_send(log, "ss", "LOG", message);
    break;
   }
 
   /* On récupère la commande dans le message */
   char* command = zmsg_popstr(msg);
   strcpy(inter, command);
-  message = strtok(inter, delim);
+  message = strtok(inter, " ");
 
   /* On agit selon la commande... */
   if (streq(command, "$TERM"))
   {
-   zstr_send(geo, "$TERM");
-   zstr_send(sim, "$TERM");
-   zstr_send(log, "$TERM");
+   zsock_send(log, "ss", "LOG", "$TERM");
    terminated = 1;
   }
   else if (streq(command, "LIST"))
   {
-   zstr_send(log, "Liste des acteurs en vie:");
-   zstr_send(log, " Acteur Routeur");
-   zstr_send(geo, "LIST"); 
-   zstr_send(sim, "LIST"); 
-   zstr_send(log, "LIST");
+   zsock_send(log, "ss", "LOG", "Liste des acteurs en vie:");
+   zsock_send(log, "ss", "LOG", " Acteur Routeur");
+   zsock_send(log, "ss", "LOG", "LIST");
   }
-  else if (streq(message, "GEO"))
-   zstr_send(geo, command);
+  //else if (streq(message, "GEO"))
+  // zstr_send(geo, command);
   else
   {
-   printf("RECV: %s\n", command);
    message = "Error (router): bad command.\n";
-   zstr_send(log, message);
+   zsock_send(log, "ss", "LOG", message);
   }
 
   /* On libère la mémoire */
   freen(command);
   zmsg_destroy(&msg);
- } 
+ }
 
  free(inter);
  free(message);
- free(geohash_address);
- free(simhash_address);
- free(log_address);
- free(command_address);
+ zpoller_destroy(&poller);
  zsock_destroy(&log);
- zsock_destroy(&geo);
- zsock_destroy(&sim);
+ zsock_destroy(&writer);
  zsock_destroy(&reader);
 }

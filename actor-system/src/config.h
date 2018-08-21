@@ -12,4 +12,7 @@
 
 #define SIZE_ADDRESS 21
 
+#define PORT_LOG 10001
+#define PORT_RT  10002
+
 #endif
