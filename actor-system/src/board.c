@@ -57,6 +57,8 @@ int main()
  printf("  Acteur Routeur: Permet à l'utilisateur de communiquer avec le système.\n\n");
 
  printf("Voici la liste des commandes disponibles: \n");
+ printf("  LIST: Liste les acteurs actuellement en ligne. \n");
+ printf("  QUIT: Ferme le board et arrête le système acteur. \n");
  printf("\n");
 
  /* On envoie les messages sur le port */
