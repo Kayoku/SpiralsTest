@@ -13,9 +13,8 @@ void actor_router_func(zsock_t *pipe, void *args)
 
  int terminated = 0;
  char writer_address[256], log_address[256], command_address[256];
+ char inter[256], message[256];
 
- char* inter   = (char*)malloc(sizeof(char) * 256);
- char* message = (char*)malloc(sizeof(char) * 256);
  sprintf(&command_address[0], ">tcp://127.0.0.1:%d", PORT_BOARD);
  sprintf(&writer_address[0], "ipc://127.0.0.1:%d", PORT_RT);
  sprintf(&log_address[0], "ipc://127.0.0.1:%d", PORT_LOG);
@@ -35,7 +34,7 @@ void actor_router_func(zsock_t *pipe, void *args)
      l'acteur s'arrête */
   if (!msg)
   {
-   message = "Error (router): msg error.\n";
+   strcpy(message, "Error (router): msg error.\n");
    zsock_send(log, "ss", "LOG", message);
    break;
   }
@@ -43,7 +42,7 @@ void actor_router_func(zsock_t *pipe, void *args)
   /* On récupère la commande dans le message */
   char* command = zmsg_popstr(msg);
   strcpy(inter, command);
-  message = strtok(inter, " ");
+  strcpy(message, strtok(inter, " "));
 
   /* On agit selon la commande... */
   if (streq(command, "$TERM"))
@@ -61,7 +60,7 @@ void actor_router_func(zsock_t *pipe, void *args)
   // zstr_send(geo, command);
   else
   {
-   message = "Error (router): bad command.\n";
+   strcpy(message, "Error (router): bad command. \n");
    zsock_send(log, "ss", "LOG", message);
   }
 
@@ -70,8 +69,6 @@ void actor_router_func(zsock_t *pipe, void *args)
   zmsg_destroy(&msg);
  }
 
- free(inter);
- free(message);
  zpoller_destroy(&poller);
  zsock_destroy(&log);
  zsock_destroy(&writer);
