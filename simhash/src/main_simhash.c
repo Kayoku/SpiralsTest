@@ -10,9 +10,9 @@
  * Fonction décrivant la façon d'utiliser la fonction
  */
 
-/**************************************************************************/
+////////////////////////////////////////////////////////////////////////////
 void print_usage()
-/**************************************************************************/
+////////////////////////////////////////////////////////////////////////////
 {
  printf("Usage: ./simhash --action hash --block <b> --padding <p> --input <string>\n       ./simhash --action hamming --block <b> --padding <p> --input <string> --input2 <string>\n<string>: chaine de caractère. (max 256)\n<b>: taille des blocks à découpé pour les hashs. (defaut: 2)\n<p>: décalage entre chaque hash. (defaut: 1)\n");
  exit(EXIT_FAILURE);
@@ -22,9 +22,9 @@ void print_usage()
  * Fonction principale
  */
 
-/**************************************************************************/
+////////////////////////////////////////////////////////////////////////////
 int main(int argc, char *argv[])
-/**************************************************************************/
+////////////////////////////////////////////////////////////////////////////
 {
  int opt = 0;
  int action = 0;
