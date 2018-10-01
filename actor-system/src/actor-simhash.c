@@ -14,10 +14,10 @@ void actor_simhash_func(zsock_t *pipe, void *args)
  int terminated = 0;
  char* message = (char*)malloc(sizeof(char) * 256);
  
- char* router_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
- char* log_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
- sprintf(log_address, "@tcp://127.0.0.1:%d", PORT_SIM_LOG);
- sprintf(router_address, ">tcp://127.0.0.1:%d", PORT_RT_SIM);
+ char* router_address = (char*)malloc(sizeof(char) * 256);
+ char* log_address = (char*)malloc(sizeof(char) * 256);
+ sprintf(log_address, "@tcp://127.0.0.1:%d", 1);
+ sprintf(router_address, ">tcp://127.0.0.1:%d", 1);
 
  zsock_t *log    = zsock_new_push(log_address);
  zsock_t *router = zsock_new_pull(router_address);

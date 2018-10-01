@@ -62,7 +62,7 @@ int main()
  printf("\n");
 
  /* On envoie les messages sur le port */
- char* command_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
+ char* command_address = (char*)malloc(sizeof(char) * 256);
  sprintf(command_address, "@tcp://127.0.0.1:%d", PORT_BOARD);
  zsock_t *router = zsock_new_push(command_address);
 

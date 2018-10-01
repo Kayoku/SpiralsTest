@@ -18,9 +18,11 @@ void actor_log_func(zsock_t *pipe, void *args)
  zsock_t *reader = zsock_new_sub(reader_address, "LOG");
  zpoller_t *poller = zpoller_new(pipe, reader, NULL);
 
+ zsock_t* which;
  while (!terminated)
  {
-  zsock_t* which = (zsock_t*) zpoller_wait(poller, -1);
+  which = (zsock_t*) zpoller_wait(poller, -1);
+
   zmsg_t *msg = zmsg_recv(which);
 
   if (!msg)
@@ -30,17 +32,14 @@ void actor_log_func(zsock_t *pipe, void *args)
   }
 
   char* command = zmsg_popstr(msg);
+  command = zmsg_popstr(msg);
 
   if (streq(command, "$TERM"))
    terminated = 1;
+  else if (streq(command, "LIST"))
+   print_log(" Acteur Log");
   else
-  {
-   char* str = zmsg_popstr(msg);
-   if (streq(str, "LIST"))
-    print_log(" Acteur Log");
-   else
-    print_log(str);
-  }
+   print_log(command);
 
   freen(command);
   zmsg_destroy(&msg);

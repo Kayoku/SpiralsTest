@@ -2,9 +2,10 @@
 
 /*
  * Comportement:
- * 
+ *
  */
 
+// http://zguide.zeromq.org/page:all
 ////////////////////////////////////////////////////////////////////////////
 void actor_geohash_func(zsock_t *pipe, void *args)
 ////////////////////////////////////////////////////////////////////////////
@@ -12,60 +13,62 @@ void actor_geohash_func(zsock_t *pipe, void *args)
  zsock_signal(pipe, 0);
 
  int terminated = 0;
- char* delim = " ";
  char* token;
- char message[256] = {0};
+ char inter[256], message[256], router_address[256], log_address[256];
 
- char* router_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
- char* log_address = (char*)malloc(sizeof(char) * SIZE_ADDRESS + 1);
- sprintf(log_address, "@tcp://127.0.0.1:%d", PORT_GEO_LOG);
- sprintf(router_address, ">tcp://127.0.0.1:%d", PORT_RT_GEO);
+ sprintf(&router_address[0], "ipc://127.0.0.1:%d", PORT_RT);
+ sprintf(&log_address[0], "ipc://127.0.0.1:%d", PORT_LOG);
 
- zsock_t *log    = zsock_new_push(log_address);
- zsock_t *router = zsock_new_pull(router_address);
+ zsock_t *log    = zsock_new_pub(log_address);
+ zsock_t *router = zsock_new_sub(router_address, "GEO");
+ zpoller_t *poller = zpoller_new(pipe, router, NULL);
 
+ zsock_t* which;
  while (!terminated)
  {
+  which = (zsock_t*) zpoller_wait(poller, -1);
+
   /* Attend un message */
-  zmsg_t *msg = zmsg_recv(router);
+  zmsg_t *msg = zmsg_recv(which);
 
   /* Si on a un bug pendant la récupération du message,
      l'acteur s'arrête */
   if (!msg)
   {
    strcpy(message, "Error (geohash): msg error.\n");
-   zstr_send(log, message);
+   zsock_send(log, "ss", "LOG", message);
    break;
   }
 
   /* On récupère la commande dans le message */
   char* command = zmsg_popstr(msg);
-  strcpy(message, command);
-  token = strtok(message, delim);
+  command = zmsg_popstr(msg);
+  strcpy(inter, command);
+  strcpy(command, strtok(inter, " "));
 
   /* On agit selon la commande... */
   if (streq(command, "$TERM"))
    terminated = 1;
   else if (streq(command, "LIST"))
-   zstr_send(log, " Acteur GeoHash");
-  else if (streq(token, "GEO"))
+   zsock_send(log, "ss", "LOG", " Acteur GeoHash");
+  else if (streq(command, "GEO"))
   {
    struct Coord coord;
    int precision;
-   token = strtok(NULL, delim);
+   token = strtok(NULL, " ");
    coord.latitude = atof(token);
-   token = strtok(NULL, delim);
+   token = strtok(NULL, " ");
    coord.longitude = atof(token);
-   token = strtok(NULL, delim);
+   token = strtok(NULL, " ");
    precision = atoi(token);
    char* hash = encode_geohash(coord, precision);
    sprintf(message, "GEO %s", hash);
-   zstr_send(log, message);
+   zsock_send(log, "ss", "LOG", message);
   }
   else
   {
    strcpy(message, "Error (geohash): bad command.\n");
-   zstr_send(log, message);
+   zsock_send(log, "ss", "LOG",  message);
   }
 
   /* On libère la mémoire */
@@ -73,8 +76,7 @@ void actor_geohash_func(zsock_t *pipe, void *args)
   zmsg_destroy(&msg);
  } 
 
- free(router_address);
- free(log_address);
- zsock_destroy(&log);
+ zpoller_destroy(&poller);
  zsock_destroy(&router); 
+ zsock_destroy(&log);
 }
