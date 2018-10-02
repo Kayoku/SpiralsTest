@@ -14,7 +14,7 @@ void actor_log_func(zsock_t *pipe, void *args)
  int terminated = 0;
  char reader_address[256];
 
- sprintf(&reader_address[0], "ipc://127.0.0.1:%d", PORT_LOG);
+ sprintf(&reader_address[0], "@tcp://127.0.0.1:%d", PORT_LOG);
  zsock_t *reader = zsock_new_sub(reader_address, "LOG");
  zpoller_t *poller = zpoller_new(pipe, reader, NULL);
 

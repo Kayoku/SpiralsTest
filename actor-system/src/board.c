@@ -58,12 +58,14 @@ int main()
 
  printf("Voici la liste des commandes disponibles: \n");
  printf("  LIST: Liste les acteurs actuellement en ligne. \n");
- printf("  QUIT: Ferme le board et arrête le système acteur. \n");
+ printf("  STOP: Permet d'arrêter tout le système acteur. \n");
+ printf("  GEO:  Permet de hasher une position avec l'algo GeoHash.\n");
+ printf("  QUIT: Ferme le board. \n");
  printf("\n");
 
  /* On envoie les messages sur le port */
- char* command_address = (char*)malloc(sizeof(char) * 256);
- sprintf(command_address, "@tcp://127.0.0.1:%d", PORT_BOARD);
+ char command_address[256];
+ sprintf(&command_address[0], ">tcp://127.0.0.1:%d", PORT_BOARD);
  zsock_t *router = zsock_new_push(command_address);
 
  /******** Zone de commande *********/
@@ -77,10 +79,10 @@ int main()
   input_read(command, SIZE_COMMAND);
 
   /* Commande LIST */
-  if (strcmp(command, "LIST") == 0)
+  if (streq(command, "LIST"))
    zstr_send(router, command);
   /* Commande GEO */
-  else if (strcmp(command, "GEO") == 0)
+  else if (streq(command, "GEO"))
   {
    int precision;
    double latitude, longitude;
@@ -104,16 +106,15 @@ int main()
   {
 
   }*/
-  /* Commande QUIT */
-  else if (strcmp(command, "QUIT") == 0)
-  {
+  /* Commande STOP */
+  else if (streq(command, "STOP"))
    zstr_send(router, "$TERM");
+  /* Commande QUIT */
+  else if (streq(command, "QUIT"))
    terminated = 1;
-  }
   else
    zstr_send(router, command);
  }
 
- free(command_address);
  zsock_destroy(&router);
 }

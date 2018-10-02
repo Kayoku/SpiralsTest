@@ -8,13 +8,59 @@
 #include "actor-simhash.h"
 #include "actor-geohash.h"
 
-int main()
+/* Structure permettant de gérer
+ * l'état du système
+ */
+
+struct ActorSystem
 {
+ int nb_actor;
+};
+
+////////////////////////////////////////////////////////////////////////////
+zactor_t* new_zactor
+////////////////////////////////////////////////////////////////////////////
+(
+ zactor_fn fn,
+ void* name,
+ struct ActorSystem* sys
+)
+{
+ sys->nb_actor++;
+ return zactor_new(fn, name);
+}
+
+////////////////////////////////////////////////////////////////////////////
+int remove_from_poller
+////////////////////////////////////////////////////////////////////////////
+(
+ zpoller_t* handler,
+ zsock_t* sock,
+ struct ActorSystem* sys
+)
+{
+ sys->nb_actor--;
+ return zpoller_remove(handler, sock);
+}
+
+////////////////////////////////////////////////////////////////////////////
+int main()
+////////////////////////////////////////////////////////////////////////////
+{
+ struct ActorSystem sys;
+ sys.nb_actor = 0;
+
  print_sys("Démarrage du système acteur...");
 
- zactor_t *actor_router  = zactor_new(actor_router_func,  "Acteur Routeur");
- zactor_t *actor_log     = zactor_new(actor_log_func,     "Acteur Log");
- zactor_t *actor_geohash = zactor_new(actor_geohash_func, "Acteur GeoHash");
+ zactor_t *actor_router =
+  new_zactor(actor_router_func, (void*)"Acteur Routeur", &sys);
+
+ zactor_t *actor_log =
+  new_zactor(actor_log_func, (void*)"Acteur Log", &sys);
+
+ zactor_t *actor_geohash =
+  new_zactor(actor_geohash_func, (void*)"Acteur GeoHash", &sys);
+
  //zactor_t *actor_simhash = zactor_new(actor_simhash_func, "Acteur SimHash");
 
  zpoller_t* handler = zpoller_new(actor_router, actor_log,
@@ -22,12 +68,12 @@ int main()
 
  print_sys("Acteurs bien démarrés.");
 
- while (!zpoller_terminated(handler))
+ while (sys.nb_actor > 0)
  {
   zsock_t* sk = (zsock_t*) zpoller_wait(handler, -1);
   if (sk == NULL)
    break;
-  zpoller_remove(handler, sk);
+  remove_from_poller(handler, sk, &sys);
  }
 
  zpoller_destroy(&handler);

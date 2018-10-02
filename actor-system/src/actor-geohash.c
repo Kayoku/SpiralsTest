@@ -16,8 +16,8 @@ void actor_geohash_func(zsock_t *pipe, void *args)
  char* token;
  char inter[256], message[256], router_address[256], log_address[256];
 
- sprintf(&router_address[0], "ipc://127.0.0.1:%d", PORT_RT);
- sprintf(&log_address[0], "ipc://127.0.0.1:%d", PORT_LOG);
+ sprintf(&router_address[0], ">tcp://127.0.0.1:%d", PORT_RT);
+ sprintf(&log_address[0], ">tcp://127.0.0.1:%d", PORT_LOG);
 
  zsock_t *log    = zsock_new_pub(log_address);
  zsock_t *router = zsock_new_sub(router_address, "GEO");

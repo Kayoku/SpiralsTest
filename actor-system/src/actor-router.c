@@ -15,9 +15,9 @@ void actor_router_func(zsock_t *pipe, void *args)
  char writer_address[256], log_address[256], command_address[256];
  char inter[256], message[256];
 
- sprintf(&command_address[0], ">tcp://127.0.0.1:%d", PORT_BOARD);
- sprintf(&writer_address[0], "ipc://127.0.0.1:%d", PORT_RT);
- sprintf(&log_address[0], "ipc://127.0.0.1:%d", PORT_LOG);
+ sprintf(&command_address[0], "@tcp://127.0.0.1:%d", PORT_BOARD);
+ sprintf(&writer_address[0], "@tcp://127.0.0.1:%d", PORT_RT);
+ sprintf(&log_address[0], ">tcp://127.0.0.1:%d", PORT_LOG);
 
  zsock_t *reader = zsock_new_pull(command_address);
  zsock_t *writer = zsock_new_pub(writer_address);
@@ -50,6 +50,7 @@ void actor_router_func(zsock_t *pipe, void *args)
   if (streq(message, "$TERM"))
   {
    zsock_send(log, "ss", "LOG", "$TERM");
+   zsock_send(writer, "ss", "GEO", "$TERM");
    terminated = 1;
   }
   else if (streq(message, "LIST"))
